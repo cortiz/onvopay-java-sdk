@@ -37,9 +37,9 @@ jobs:
         run: |
           VERSION="${TAG_NAME#v}"
           echo "Derived version: $VERSION"
-          mvn -B -ntp versions:set -DnewVersion="$VERSION"
+          ./mvnw -B -ntp versions:set -DnewVersion="$VERSION"
 
       - name: Deploy to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B -ntp -DskipTests -DretryFailedDeploymentCount=3 deploy
+        run: ./mvnw -B -ntp -DskipTests -DretryFailedDeploymentCount=3 deploy
