@@ -5,8 +5,17 @@
   <artifactId>onvopay-java-sdk</artifactId>
   <packaging>jar</packaging>
   <version>1.0.0-SNAPSHOT</version>
-  <name>Maven Quick Start Archetype</name>
-  <url>http://maven.apache.org</url>
+  <name>OnvoPay Java SDK</name>
+  <description>Official (community-maintained) Java SDK for integrating with OnvoPay APIs.</description>
+  <url>https://github.com/cortiz/onvopay-java-sdk</url>
+
+  <licenses>
+    <license>
+      <name>BSD 3-Clause License</name>
+      <url>https://opensource.org/licenses/BSD-3-Clause</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
