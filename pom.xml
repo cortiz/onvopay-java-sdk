@@ -160,9 +160,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <includePom>true</includePom>
+                </configuration>
             </plugin>
 
-            <!-- Maven Javadoc Plugin -->
+            <!-- Maven Javadoc Plugin: attach javadoc jar; relax doclint for Java 21 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -175,6 +178,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <source>21</source>
+                    <encoding>UTF-8</encoding>
+                    <doclint>none</doclint>
+                    <failOnError>false</failOnError>
+                </configuration>
             </plugin>
         </plugins>
     </build>
