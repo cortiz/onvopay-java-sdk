@@ -48,7 +48,7 @@
         <jackson-databind.version>2.20.0</jackson-databind.version>
         <jackson.version>2.20</jackson.version>
         <assertj.version>3.26.3</assertj.version>
-        <mockito.version>5.14.2</mockito.version>
+        <mockito.version>5.20.0</mockito.version>
 
     </properties>
 
