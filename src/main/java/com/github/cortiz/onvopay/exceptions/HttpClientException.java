@@ -21,37 +21,20 @@
  *
  */
 
-package com.github.cortiz.onvopay.utils;
+package com.github.cortiz.onvopay.exceptions;
 
-import java.net.URI;
-
-public final class Validations {
-
-    /**
-     * Checks whether the given string is a valid absolute URL.
-     *
-     * @param value the string to validate as a URL; may be null or empty
-     * @return {@code true} if the given string is a valid absolute URL, otherwise {@code false}
-     */
-    public static boolean isValidUrl(String value) {
-        if (isNullOrEmpty(value)) {
-            return false;
-        }
-        try {
-            return URI.create(value).isAbsolute();
-        } catch (Exception e) {
-            return false;
-        }
+/**
+ * Represents a custom exception for HTTP client errors.
+ * This exception is typically thrown when an unexpected situation
+ * occurs during HTTP client operations, such as connection issues
+ * or non-successful HTTP responses.
+ */
+public class HttpClientException extends Exception {
+    public HttpClientException(String message) {
+        super(message);
     }
 
-    /**
-     * Checks if a given string is null or empty (blank).
-     *
-     * @param value the string to check; may be null
-     * @return {@code true} if the string is null or contains only whitespace, otherwise {@code false}
-     */
-    public static boolean isNullOrEmpty(String value) {
-        return value == null || value.isBlank();
+    public HttpClientException(String message, Throwable cause) {
+        super(message, cause);
     }
-
 }

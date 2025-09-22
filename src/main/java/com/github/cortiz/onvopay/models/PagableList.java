@@ -21,40 +21,9 @@
  *
  */
 
-package com.github.cortiz.onvopay;
+package com.github.cortiz.onvopay.models;
 
-import org.junit.jupiter.api.Test;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-public class OnvoPayAPIClientTest {
-
-
-    @Test
-    public void testConstructor_WithInvalidBaseUrl() {
-
-        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("", "secretKey"));
-
-        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient(null, "secretKey"));
-
-        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("not-a-uri", "secretKey"));
-    }
-
-    @Test
-    public void testConstructor_WithInvalidSecretKey() {
-
-        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("https://example.com", ""));
-
-        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("https://example.com", null));
-
-        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("https://example.com", "not_prefix"));
-    }
-
-    @Test
-    public void testConstructor_Valid() {
-        new OnvoPayAPIClient("onvo_live_OK");
-        new OnvoPayAPIClient("onvo_test_OK");
-        new OnvoPayAPIClient("https://api.onvopay.com/v1", "onvo_live_OK");
-        new OnvoPayAPIClient("https://api.onvopay.com/v1", "onvo_test_OK");
-    }
+public interface PagableList<T> extends List<T> {
 }

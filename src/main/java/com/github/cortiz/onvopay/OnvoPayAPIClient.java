@@ -23,6 +23,11 @@
 
 package com.github.cortiz.onvopay;
 
+import com.github.cortiz.onvopay.api.ClientsAPI;
+import com.github.cortiz.onvopay.utils.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static com.github.cortiz.onvopay.utils.Validations.isNullOrEmpty;
 import static com.github.cortiz.onvopay.utils.Validations.isValidUrl;
 
@@ -39,6 +44,7 @@ import static com.github.cortiz.onvopay.utils.Validations.isValidUrl;
  */
 public class OnvoPayAPIClient {
 
+    private static final Logger log = LoggerFactory.getLogger(OnvoPayAPIClient.class);
     /**
      * The default base URL for accessing the OnvoPay API.
      * <br/>
@@ -55,6 +61,7 @@ public class OnvoPayAPIClient {
     public static final String BASE_URL = "https://api.onvopay.com/v1";
     private final String baseUrl;
     private final String secretKey;
+    private final HttpClient httpClient;
 
     /**
      * Constructs a new instance of the OnvoPayAPIClient with the specified secret key.
@@ -82,6 +89,7 @@ public class OnvoPayAPIClient {
      *                                  empty, or does not have the required prefix.
      */
     public OnvoPayAPIClient(String baseUrl, String secretKey) {
+        log.info("Initializing OnvoPayAPIClient with base URL: {}", baseUrl);
         if (isNullOrEmpty(baseUrl)) {
             throw new IllegalArgumentException("Base URL cannot be null or empty.");
         }
@@ -96,5 +104,15 @@ public class OnvoPayAPIClient {
         }
         this.baseUrl = baseUrl;
         this.secretKey = secretKey;
+        this.httpClient = new HttpClient.Builder()
+                .baseUri(this.baseUrl)
+                .defaultHeader("Content-Type", "application/json")
+                .defaultHeader("Authorization", "Bearer " + this.secretKey)
+                .build();
+    }
+
+
+    public ClientsAPI clients() {
+        return new ClientsAPI(this.httpClient);
     }
 }

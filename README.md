@@ -12,7 +12,8 @@ Note: This project is in early development and the public API is subject to chan
 [![CI - Build and Test](https://github.com/cortiz/onvopay-java-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/cortiz/onvopay-java-sdk/actions/workflows/ci.yml)
 
 ## Features (planned)
-- Authenticated API client for OnvoPay
+
+- Authenticated API httpClient for OnvoPay
 - Idiomatic Java models and error handling
 - JSON serialization via Jackson
 - First-class test support
@@ -79,10 +80,10 @@ dependencies {
 import com.github.cortiz.onvopay.OnvoPayAPIClient;
 
 public class App {
-  public static void main(String[] args) {
+    static void main(String[] args) {
     // Placeholder usage — the API surface will expand as endpoints are added.
-    OnvoPayAPIClient client = new OnvoPayAPIClient();
-    // TODO: Configure client with API key/base URL and call endpoints as they are implemented.
+        OnvoPayAPIClient httpClient = new OnvoPayAPIClient();
+        // TODO: Configure httpClient with API key/base URL and call endpoints as they are implemented.
   }
 }
 ```
