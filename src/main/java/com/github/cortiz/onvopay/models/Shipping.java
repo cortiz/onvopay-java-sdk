@@ -21,37 +21,34 @@
  *
  */
 
-package com.github.cortiz.onvopay.utils;
+package com.github.cortiz.onvopay.models;
 
-import java.net.URI;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class Validations {
-
-    /**
-     * Checks whether the given string is a valid absolute URL.
-     *
-     * @param value the string to validate as a URL; may be null or empty
-     * @return {@code true} if the given string is a valid absolute URL, otherwise {@code false}
-     */
-    public static boolean isValidUrl(String value) {
-        if (isNullOrEmpty(value)) {
-            return false;
-        }
-        try {
-            return URI.create(value).isAbsolute();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Checks if a given string is null or empty (blank).
-     *
-     * @param value the string to check; may be null
-     * @return {@code true} if the string is null or contains only whitespace, otherwise {@code false}
-     */
-    public static boolean isNullOrEmpty(String value) {
-        return value == null || value.isBlank();
-    }
-
+/**
+ * Represents the shipping details of an entity, including address, name, and phone information.
+ * <p>
+ * This record is designed for use in systems requiring structured shipping
+ * information, particularly in the context of JSON serialization and deserialization
+ * using the Jackson library.
+ * <p>
+ * The fields in this record include:
+ * - `address`: An {@link Address} object specifying the postal address for shipping.
+ * - `name`: The name associated with the shipping details.
+ * - `phone`: The phone number associated with the shipping details.
+ * <p>
+ * This record ensures immutability principles and adheres to JSON handling conventions
+ * via annotations:
+ * - {@link JsonInclude.Include.NON_NULL}: Ensures only non-null fields are serialized.
+ * - {@link JsonIgnoreProperties}: Ignores unknown properties during deserialization.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record Shipping(
+        @JsonProperty("address") Address address,
+        @JsonProperty("name") String name,
+        @JsonProperty("phone") String phone
+) {
 }

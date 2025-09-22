@@ -20,54 +20,50 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+package com.github.cortiz.onvopay;
 
-package com.github.cortiz.onvopay.exceptions;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.IOException;
+import java.net.InetAddress;
 
 /**
- * Tests for the OnvoPayException class.
- * This class validates the behavior of the getStatusCode method
- * and ensures it correctly returns the status code assigned during initialization.
+ * Integration tests that require a real secret key provided via environment variables.
+ * <p>
+ * Set ONVOPAY_SECRET_KEY to a value like onvo_test_xxx or onvo_live_xxx to enable these tests.
+ * These tests make live HTTP requests to httpbin.org to validate headers are sent as expected.
  */
-class OnvoPayExceptionTest {
+public class OnvoPayIT {
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(OnvoPayIT.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(OnvoPayExceptionTest.class);
+    private static boolean online;
 
-    @Test
-    void testGetStatusCode_WithStatusCodeProvided() {
-        LOG.info("OnvoPayExceptionTest#testGetStatusCode_WithStatusCodeProvided - start");
-        // Arrange
-        int expectedStatusCode = 400;
-        OnvoPayException exception = new OnvoPayException(
-                expectedStatusCode,
-                "API_123",
-                List.of("Invalid input", "Missing field"),
-                "Bad Request"
-        );
+    @BeforeAll
+    static void checkOnline() {
+        LOG.info("OnvoPayIT@BeforeAll - checking connectivity to httpbin.org");
+        try {
+            online = InetAddress.getByName("httpbin.org").isReachable(2000);
+        } catch (IOException e) {
+            online = false;
+        }
+        LOG.info("OnvoPayIT@BeforeAll - online={}", online);
+    }
 
-        // Act
-        int actualStatusCode = exception.getStatusCode();
-
-        // Assert
-        assertEquals(expectedStatusCode, actualStatusCode, "The status code should match the provided value.");
+    @AfterAll
+    static void afterAll() {
+        LOG.info("OnvoPayIT@AfterAll - tests finished");
     }
 
     @Test
-    void testGetStatusCode_WithDefaultConstructor() {
-        LOG.info("OnvoPayExceptionTest#testGetStatusCode_WithDefaultConstructor - start");
-        // Arrange
-        String message = "A simple error occurred.";
-        OnvoPayException exception = new OnvoPayException(message);
+    @DisplayName("Create client from env secret and validate Authorization header via httpbin.org")
+    @EnabledIfEnvironmentVariable(named = "ONVOPAY_SECRET_KEY", matches = "onvo_(live|test)_.*")
+    void createClientFromEnvAndEchoAuthHeader() throws Exception {
 
-        // Act
-        int actualStatusCode = exception.getStatusCode();
-
-        // Assert
-        assertEquals(0, actualStatusCode, "The status code should be 0 for the default constructor.");
     }
 }

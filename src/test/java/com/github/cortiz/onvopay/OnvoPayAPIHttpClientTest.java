@@ -21,53 +21,38 @@
  *
  */
 
-package com.github.cortiz.onvopay.exceptions;
+package com.github.cortiz.onvopay;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+public class OnvoPayAPIHttpClientTest {
 
-/**
- * Tests for the OnvoPayException class.
- * This class validates the behavior of the getStatusCode method
- * and ensures it correctly returns the status code assigned during initialization.
- */
-class OnvoPayExceptionTest {
-
-    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(OnvoPayExceptionTest.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(OnvoPayAPIHttpClientTest.class);
 
     @Test
-    void testGetStatusCode_WithStatusCodeProvided() {
-        LOG.info("OnvoPayExceptionTest#testGetStatusCode_WithStatusCodeProvided - start");
-        // Arrange
-        int expectedStatusCode = 400;
-        OnvoPayException exception = new OnvoPayException(
-                expectedStatusCode,
-                "API_123",
-                List.of("Invalid input", "Missing field"),
-                "Bad Request"
-        );
-
-        // Act
-        int actualStatusCode = exception.getStatusCode();
-
-        // Assert
-        assertEquals(expectedStatusCode, actualStatusCode, "The status code should match the provided value.");
+    public void testConstructor_WithInvalidBaseUrl() {
+        LOG.info("OnvoPayAPIHttpClientTest#testConstructor_WithInvalidBaseUrl - start");
+        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("", "secretKey"));
+        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient(null, "secretKey"));
+        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("not-a-uri", "secretKey"));
     }
 
     @Test
-    void testGetStatusCode_WithDefaultConstructor() {
-        LOG.info("OnvoPayExceptionTest#testGetStatusCode_WithDefaultConstructor - start");
-        // Arrange
-        String message = "A simple error occurred.";
-        OnvoPayException exception = new OnvoPayException(message);
+    public void testConstructor_WithInvalidSecretKey() {
+        LOG.info("OnvoPayAPIHttpClientTest#testConstructor_WithInvalidSecretKey - start");
+        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("https://example.com", ""));
+        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("https://example.com", null));
+        assertThrows(IllegalArgumentException.class, () -> new OnvoPayAPIClient("https://example.com", "not_prefix"));
+    }
 
-        // Act
-        int actualStatusCode = exception.getStatusCode();
-
-        // Assert
-        assertEquals(0, actualStatusCode, "The status code should be 0 for the default constructor.");
+    @Test
+    public void testConstructor_Valid() {
+        LOG.info("OnvoPayAPIHttpClientTest#testConstructor_Valid - start");
+        new OnvoPayAPIClient("onvo_live_OK");
+        new OnvoPayAPIClient("onvo_test_OK");
+        new OnvoPayAPIClient("https://api.onvopay.com/v1", "onvo_live_OK");
+        new OnvoPayAPIClient("https://api.onvopay.com/v1", "onvo_test_OK");
     }
 }

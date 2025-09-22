@@ -21,37 +21,47 @@
  *
  */
 
-package com.github.cortiz.onvopay.utils;
+// Java
+package com.github.cortiz.onvopay.models;
 
-import java.net.URI;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-public final class Validations {
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-    /**
-     * Checks whether the given string is a valid absolute URL.
-     *
-     * @param value the string to validate as a URL; may be null or empty
-     * @return {@code true} if the given string is a valid absolute URL, otherwise {@code false}
-     */
-    public static boolean isValidUrl(String value) {
-        if (isNullOrEmpty(value)) {
-            return false;
+/**
+ * Represents a country code compliant with the ISO 3166-1 alpha-2 standard.
+ * This class validates the provided country code value during instantiation
+ * and ensures it adheres to the required format.
+ * <br/>
+ * The input value is standardized to uppercase and verified against
+ * known ISO 3166-1 alpha-2 country codes as defined by the {@link Locale#getISOCountries()} method.
+ * <br/>
+ * Immutable and JSON-serializable, the class can be used as a lightweight
+ * representation of a country's ISO code.
+ */
+public record CountryCode(String value) {
+
+    private static final Set<String> ISO_ALPHA2 =
+            Arrays.stream(Locale.getISOCountries()).collect(Collectors.toUnmodifiableSet());
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public CountryCode {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Country code cannot be null or blank");
         }
-        try {
-            return URI.create(value).isAbsolute();
-        } catch (Exception e) {
-            return false;
+        String normalized = value.toUpperCase(Locale.ROOT);
+        if (normalized.length() != 2 || !ISO_ALPHA2.contains(normalized)) {
+            throw new IllegalArgumentException("Invalid ISO 3166-1 alpha-2 country code: " + value);
         }
+        value = normalized;
     }
 
-    /**
-     * Checks if a given string is null or empty (blank).
-     *
-     * @param value the string to check; may be null
-     * @return {@code true} if the string is null or contains only whitespace, otherwise {@code false}
-     */
-    public static boolean isNullOrEmpty(String value) {
-        return value == null || value.isBlank();
+    @JsonValue
+    public String toJson() {
+        return value;
     }
-
 }
