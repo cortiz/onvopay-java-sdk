@@ -35,7 +35,7 @@ import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CustomerDateTest {
+class ClientDateTest {
 
     @Test
     void deserializeDates_WithUtcZ_Succeeds() throws Exception {
@@ -48,13 +48,13 @@ class CustomerDateTest {
                 }
                 """;
 
-        Customer customer = mapper().readValue(json, Customer.class);
+        Client client = mapper().readValue(json, Client.class);
 
         Instant expected = Instant.parse("2022-06-12T21:21:10.587Z");
-        assertNotNull(customer);
-        assertEquals(expected, customer.createdAt());
-        assertNull(customer.lastTransactionAt(), "lastTransactionAt should be null when JSON has null");
-        assertEquals(expected, customer.updatedAt());
+        assertNotNull(client);
+        assertEquals(expected, client.createdAt());
+        assertNull(client.lastTransactionAt(), "lastTransactionAt should be null when JSON has null");
+        assertEquals(expected, client.updatedAt());
     }
 
     private static ObjectMapper mapper() {
@@ -73,15 +73,15 @@ class CustomerDateTest {
                 }
                 """;
 
-        Customer customer = mapper().readValue(json, Customer.class);
+        Client client = mapper().readValue(json, Client.class);
 
         Instant expectedCreated = OffsetDateTime.parse("2022-06-12T16:21:10.587-05:00")
                 .withOffsetSameInstant(ZoneOffset.UTC).toInstant(); // 21:21:10.587Z
         Instant expectedUpdated = OffsetDateTime.parse("2022-06-12T23:21:10.587+02:00")
                 .withOffsetSameInstant(ZoneOffset.UTC).toInstant(); // 21:21:10.587Z
 
-        assertEquals(expectedCreated, customer.createdAt());
-        assertEquals(expectedUpdated, customer.updatedAt());
+        assertEquals(expectedCreated, client.createdAt());
+        assertEquals(expectedUpdated, client.updatedAt());
     }
 
     @Test
@@ -89,7 +89,7 @@ class CustomerDateTest {
         System.out.println("CustomerDateTest#serializeDates_UseIso8601UtcWithMillis - start");
         Instant instant = Instant.parse("2022-06-12T21:21:10.587Z");
 
-        Customer customer = new Customer(
+        Client client = new Client(
                 null,        // id
                 null,        // address
                 null,        // amountSpent
@@ -105,7 +105,7 @@ class CustomerDateTest {
                 instant      // updatedAt
         );
 
-        String json = mapper().writeValueAsString(customer);
+        String json = mapper().writeValueAsString(client);
 
         // Expect exact ISO-8601 with milliseconds and 'Z' (UTC)
         assertTrue(json.contains("\"createdAt\":\"2022-06-12T21:21:10.587Z\""),

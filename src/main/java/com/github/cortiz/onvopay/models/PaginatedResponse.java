@@ -23,7 +23,22 @@
 
 package com.github.cortiz.onvopay.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
-public interface PagableList<T> extends List<T> {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record PaginatedResponse<T>(
+        List<T> data,
+        Meta meta
+) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public record Meta(
+            int total,
+            int limit,
+            int pages,
+            String cursorNext,
+            String cursorBefore
+    ) {
+    }
 }

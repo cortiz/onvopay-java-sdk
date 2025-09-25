@@ -24,6 +24,7 @@
 package com.github.cortiz.onvopay.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -119,4 +120,25 @@ public abstract class OnvoAPI {
             return Optional.empty();
         }
     }
+
+    /**
+     * Deserializes the provided JSON string into an instance of the specified type reference.
+     * If the deserialization is successful, an {@code Optional} containing the object is returned.
+     * If an error occurs during deserialization, an {@code Optional.empty()} is returned.
+     *
+     * @param body             the JSON string to be deserialized
+     * @param expectedResponse the type reference representing the expected type of the deserialized object
+     * @param <T>              the type of the object to be deserialized and returned
+     * @return an {@code Optional<T>} containing the deserialized object, or {@code Optional.empty()} if an error occurs
+     */
+    protected <T> Optional<T> readBody(String body, TypeReference<T> expectedResponse) {
+        try {
+            return Optional.of(this.objectMapper.readValue(body, expectedResponse));
+        } catch (JsonProcessingException e) {
+            log.error("Error deserializing response body", e);
+            return Optional.empty();
+        }
+    }
+
+
 }

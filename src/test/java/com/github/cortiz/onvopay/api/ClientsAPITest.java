@@ -26,7 +26,7 @@ package com.github.cortiz.onvopay.api;
 import com.github.cortiz.onvopay.exceptions.HttpClientException;
 import com.github.cortiz.onvopay.exceptions.OnvoPayException;
 import com.github.cortiz.onvopay.models.Address;
-import com.github.cortiz.onvopay.models.CreateCustomer;
+import com.github.cortiz.onvopay.models.CreateClient;
 import com.github.cortiz.onvopay.utils.HttpClient;
 import org.junit.jupiter.api.Test;
 
@@ -44,8 +44,8 @@ class ClientsAPITest {
         var mockHttpClient = mock(HttpClient.class);
         var mockResponse = mock(HttpResponse.class);
         var api = new ClientsAPI(mockHttpClient);
-        var customer = new CreateCustomer(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
-                                          "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
+        var customer = new CreateClient(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
+                                        "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
         when(mockResponse.statusCode()).thenReturn(201);
         when(mockResponse.body()).thenReturn("""
                                                        {
@@ -101,8 +101,8 @@ class ClientsAPITest {
         var mockHttpClient = mock(HttpClient.class);
         var mockResponse = mock(HttpResponse.class);
         var api = new ClientsAPI(mockHttpClient);
-        var customer = new CreateCustomer(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
-                                          "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
+        var customer = new CreateClient(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
+                                        "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
         when(mockHttpClient.post(anyString(), anyString())).thenReturn(mockResponse);
         when(mockResponse.statusCode()).thenReturn(400);
         when(mockResponse.body()).thenReturn("""
@@ -124,8 +124,8 @@ class ClientsAPITest {
         var mockHttpClient = mock(HttpClient.class);
         var mockResponse = mock(HttpResponse.class);
         var api = new ClientsAPI(mockHttpClient);
-        var customer = new CreateCustomer(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
-                                          "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
+        var customer = new CreateClient(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
+                                        "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
         when(mockHttpClient.post(anyString(), anyString())).thenReturn(mockResponse);
         when(mockResponse.statusCode()).thenReturn(401);
         when(mockResponse.body()).thenReturn("""
@@ -144,8 +144,8 @@ class ClientsAPITest {
         var mockHttpClient = mock(HttpClient.class);
         var mockResponse = mock(HttpResponse.class);
         var api = new ClientsAPI(mockHttpClient);
-        var customer = new CreateCustomer(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
-                                          "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
+        var customer = new CreateClient(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
+                                        "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
         when(mockHttpClient.post(anyString(), anyString())).thenReturn(mockResponse);
         when(mockResponse.statusCode()).thenReturn(403);
         when(mockResponse.body()).thenReturn("""
@@ -165,8 +165,8 @@ class ClientsAPITest {
         var mockHttpClient = mock(HttpClient.class);
         var mockResponse = mock(HttpResponse.class);
         var api = new ClientsAPI(mockHttpClient);
-        var customer = new CreateCustomer(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
-                                          "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
+        var customer = new CreateClient(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
+                                        "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
         when(mockHttpClient.post(anyString(), anyString())).thenReturn(mockResponse);
         when(mockResponse.statusCode()).thenReturn(201);
         when(mockResponse.body()).thenReturn("");
@@ -178,10 +178,144 @@ class ClientsAPITest {
     void testCreateClient_Error_ClientError() throws HttpClientException {
         var mockHttpClient = mock(HttpClient.class);
         var api = new ClientsAPI(mockHttpClient);
-        var customer = new CreateCustomer(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
-                                          "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
+        var customer = new CreateClient(new Address("SJ", "CR", "TuanisCloud", "Apt3", "30303", "Cartago"),
+                                        "Test User", "myEmail@email.com", "Test Subject 1", "+50612345678", null);
         when(mockHttpClient.post(anyString(), anyString())).thenThrow(new HttpClientException("Mock Error"));
         var ex = assertThrows(OnvoPayException.class, () -> api.createClient(customer));
         assertEquals("Mock Error", ex.getMessage());
+    }
+
+    @Test
+    void testGetClientByEmail_Success() throws HttpClientException, OnvoPayException {
+        var mockHttpClient = mock(HttpClient.class);
+        var mockResponse = mock(HttpResponse.class);
+        var api = new ClientsAPI(mockHttpClient);
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockResponse.body()).thenReturn("""
+                                                     {
+                                                         "data": [
+                                                                   {
+                                                                     "id": "cl502zv0d0127ebdp3zt27651",
+                                                                     "address": {
+                                                                       "city": "San José",
+                                                                       "country": "CR",
+                                                                       "line1": null,
+                                                                       "line2": null,
+                                                                       "postalCode": "10101",
+                                                                       "state": "San José"
+                                                                     },
+                                                                     "amountSpent": 0,
+                                                                     "description": "Cliente de prueba",
+                                                                     "createdAt": "2022-06-12T21:21:10.587Z",
+                                                                     "email": "test_customer@onvopay.com",
+                                                                     "lastTransactionAt": null,
+                                                                     "mode": "test",
+                                                                     "name": "John Doe",
+                                                                     "phone": "+50688880000",
+                                                                     "shipping": {
+                                                                       "address": {
+                                                                         "city": null,
+                                                                         "country": "CR",
+                                                                         "line1": null,
+                                                                         "line2": null,
+                                                                         "postalCode": null,
+                                                                         "state": null
+                                                                       },
+                                                                       "name": "John Doe",
+                                                                       "phone": null
+                                                                     },
+                                                                     "transactionsCount": 0,
+                                                                     "updatedAt": "2022-06-12T21:21:10.587Z"
+                                                                   }
+                                                                 ],
+                                                         "meta": {
+                                                             "total": 15,
+                                                             "limit": 10,
+                                                             "pages": 2,
+                                                             "cursorNext": "cmfwnvxdpq0w7k02dv0q4x6wo",
+                                                             "cursorBefore": "cmfwo6hfkq16fk02d176k4c1l"
+                                                         }
+                                                     }
+                                                     """);
+        when(mockHttpClient.get(anyString())).thenReturn(mockResponse);
+        var customerOptional = api.getClientsByEmail("test_customer@onvopay.com");
+        assertNotNull(customerOptional);
+        assertFalse(customerOptional.isEmpty());
+        var customers = customerOptional.get();
+        assertFalse(customers.data().isEmpty());
+        assertEquals(1, customers.data().size());
+        assertEquals("cl502zv0d0127ebdp3zt27651", customers.data().getFirst().id());
+        assertEquals(2, customers.meta().pages());
+        assertEquals("cmfwo6hfkq16fk02d176k4c1l", customers.meta().cursorBefore());
+    }
+
+    @Test
+    void testGetClientByEmail_Error_email() throws HttpClientException, OnvoPayException {
+        var api = new ClientsAPI(mock(HttpClient.class));
+        assertTrue(api.getClientsByEmail(null).isEmpty());
+        assertTrue(api.getClientsByEmail("").isEmpty());
+    }
+
+    @Test
+    void testGetClientByEmail_Error_not200_BadResponse() throws HttpClientException, OnvoPayException {
+        var mockHttpClient = mock(HttpClient.class);
+        var mockResponse = mock(HttpResponse.class);
+        var api = new ClientsAPI(mockHttpClient);
+        when(mockResponse.statusCode()).thenReturn(400);
+        when(mockResponse.body()).thenReturn("""
+                                                     """);
+        when(mockHttpClient.get(anyString())).thenReturn(mockResponse);
+        var ex = assertThrows(OnvoPayException.class, () -> {
+            api.getClientsByEmail("email@email.com");
+        });
+        assertEquals("Unable to read onvo error response", ex.getMessage());
+    }
+
+    @Test
+    void testGetClientByEmail_Error_403() throws HttpClientException, OnvoPayException {
+        var mockHttpClient = mock(HttpClient.class);
+        var mockResponse = mock(HttpResponse.class);
+        var api = new ClientsAPI(mockHttpClient);
+        when(mockResponse.statusCode()).thenReturn(403);
+        when(mockResponse.body()).thenReturn("""
+                                                      {
+                                                          "statusCode": 403,
+                                                          "message": "The provided API key is not valid.",
+                                                          "error": "Forbidden"
+                                                       }
+                                                     """);
+        when(mockHttpClient.get(anyString())).thenReturn(mockResponse);
+        var ex = assertThrows(OnvoPayException.class, () -> {
+            api.getClientsByEmail("email@email.com");
+        });
+        assertEquals("The provided API key is not valid.", ex.getMessages().getFirst());
+        assertEquals(403, ex.getStatusCode());
+    }
+
+    @Test
+    void testGetClientByEmail_Error_bad_response() throws HttpClientException, OnvoPayException {
+        var mockHttpClient = mock(HttpClient.class);
+        var mockResponse = mock(HttpResponse.class);
+        var api = new ClientsAPI(mockHttpClient);
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockResponse.body()).thenReturn("""
+                                                     
+                                                     """);
+        when(mockHttpClient.get(anyString())).thenReturn(mockResponse);
+        var ex = assertThrows(OnvoPayException.class, () -> {
+            api.getClientsByEmail("email@email.com");
+        });
+        assertEquals("Unable to read client response", ex.getMessage());
+    }
+
+    @Test
+    void testGetClients_Error_limits() {
+        var api = new ClientsAPI(mock(HttpClient.class));
+        assertThrows(IllegalArgumentException.class, () -> {
+            api.getClients(Integer.MAX_VALUE * -1, null, null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            api.getClients(Integer.MAX_VALUE, null, null);
+        });
     }
 }

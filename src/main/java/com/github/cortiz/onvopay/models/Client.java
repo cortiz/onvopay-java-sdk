@@ -62,7 +62,7 @@ import java.time.Instant;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record Customer(
+public record Client(
         @JsonProperty("id") String id,
         @JsonProperty("address") Address address,
         @JsonProperty("amountSpent") Long amountSpent,

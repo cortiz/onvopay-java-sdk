@@ -52,7 +52,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CreateCustomer(
+public record CreateClient(
         @JsonProperty("address") Address address,
         @JsonProperty("description") String description,
         @JsonProperty("email") String email,

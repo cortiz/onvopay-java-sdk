@@ -23,6 +23,7 @@
 
 package com.github.cortiz.onvopay.exceptions;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +38,22 @@ public class OnvoPayException extends Exception {
     private final List<String> messages;
     private final String error;
 
+
+    /**
+     * Constructs a new OnvoPayException with the specified cause.
+     * The status code, API-specific error code, and detailed error messages are initialized
+     * to default values (0, empty string, and an empty list, respectively). The general
+     * error description is extracted from the provided cause.
+     *
+     * @param cause the throwable cause of this exception
+     */
+    public OnvoPayException(Throwable cause) {
+        super(cause);
+        this.statusCode = -1;
+        this.apiCode = "Internal Client Error";
+        this.messages = Collections.emptyList();
+        this.error = cause.getMessage();
+    }
     /**
      * Constructs a new OnvoPayException with the specified details about the error.
      * This exception is meant to encapsulate detailed error information such as
