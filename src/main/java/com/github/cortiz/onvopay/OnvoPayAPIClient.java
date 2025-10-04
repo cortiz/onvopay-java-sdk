@@ -23,6 +23,7 @@
 
 package com.github.cortiz.onvopay;
 
+import com.github.cortiz.onvopay.api.CheckoutAPI;
 import com.github.cortiz.onvopay.api.ClientsAPI;
 import com.github.cortiz.onvopay.utils.HttpClient;
 import org.slf4j.Logger;
@@ -114,5 +115,9 @@ public class OnvoPayAPIClient {
 
     public ClientsAPI clients() {
         return new ClientsAPI(this.httpClient);
+    }
+
+    public CheckoutAPI checkout() {
+        return new CheckoutAPI(this.httpClient);
     }
 }
